@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -26,86 +26,36 @@ import {
   ArrowRight,
   Globe
 } from 'lucide-react';
-
-interface VoiceSettings {
-  speed: number;
-  gender: 'male' | 'female';
-  accent: 'american' | 'british' | 'australian' | 'canadian';
-}
-
-interface Section {
-  id: string;
-  title: string;
-  text: string;
-  image?: string;
-  voiceSettings?: VoiceSettings;
-}
-
-interface GlobalSettings {
-  videoTitle: string;
-  brightness: number;
-  contrast: number;
-  saturation: number;
-  musicVolume: number;
-  voiceVolume: number;
-  watermark: string;
-  aspectRatio: '16:9' | '9:16' | '1:1';
-  outputQuality: 'HD' | 'FHD' | '4K';
-  background: 'black' | 'white' | 'custom';
-  customBackgroundImage?: string;
-}
+import { useVideoStore, VoiceSettings } from '@/lib/store';
+import { useRouter } from 'next/navigation';
 
 export default function SegmentsPage() {
-  // Load sections from localStorage (created from script splitting)
-  const [sections, setSections] = useState<Section[]>([]);
+  const router = useRouter();
   
-  // Initialize sections from localStorage on component mount
-  React.useEffect(() => {
-    const savedSections = localStorage.getItem('videoSections');
-    if (savedSections) {
-      try {
-        const parsedSections = JSON.parse(savedSections);
-        setSections(parsedSections);
-        // Set the first section as selected once sections are loaded
-        if (parsedSections.length > 0) {
-          setSelectedSectionId(parsedSections[0].id);
-        }
-      } catch (error) {
-        console.error('Error parsing saved sections:', error);
-        // Fallback to default sections if parsing fails
-        const fallbackSections: Section[] = [
-          {
-            id: '1',
-            title: 'Section 1',
-            text: 'No script data found. Please go back and enter your script.'
-          }
-        ];
-        setSections(fallbackSections);
-        setSelectedSectionId('1');
-      }
-    } else {
-      // Redirect back to create page if no sections found
-      window.location.href = '/create';
-    }
-  }, []);
+  // Use Zustand store
+  const {
+    sections,
+    globalSettings,
+    selectedSectionId,
+    setSections,
+    updateSection,
+    updateGlobalSetting,
+    setSelectedSectionId
+  } = useVideoStore();
 
-  const [selectedSectionId, setSelectedSectionId] = useState<string>('');
+  // Local UI state
   const [showGlobalSettings, setShowGlobalSettings] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [globalSettings, setGlobalSettings] = useState<GlobalSettings>({
-    videoTitle: 'My YouTube Short',
-    brightness: 100,
-    contrast: 100,
-    saturation: 100,
-    musicVolume: 50,
-    voiceVolume: 80,
-    watermark: '',
-    aspectRatio: '9:16',
-    outputQuality: 'FHD',
-    background: 'black',
-    customBackgroundImage: undefined
-  });
+
+  // Initialize selected section if none selected
+  useEffect(() => {
+    if (sections.length === 0) {
+      router.push('/create');
+    } else if (!selectedSectionId && sections.length > 0) {
+      setSelectedSectionId(sections[0].id);
+    }
+  }, [sections, selectedSectionId, setSelectedSectionId, router]);
 
   const selectedSection = sections.find(s => s.id === selectedSectionId);
 
@@ -122,16 +72,14 @@ export default function SegmentsPage() {
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
-      handleGlobalSettingChange('customBackgroundImage', result);
-      handleGlobalSettingChange('background', 'custom');
+      updateGlobalSetting('customBackgroundImage', result);
+      updateGlobalSetting('background', 'custom');
     };
     reader.readAsDataURL(file);
   };
 
-  const handleSectionUpdate = (sectionId: string, updates: Partial<Section>) => {
-    setSections(prev => prev.map(section => 
-      section.id === sectionId ? { ...section, ...updates } : section
-    ));
+  const handleSectionUpdate = (sectionId: string, updates: Partial<any>) => {
+    updateSection(sectionId, updates);
   };
 
   const handleVoiceSettingChange = (key: keyof VoiceSettings, value: any) => {
@@ -143,8 +91,8 @@ export default function SegmentsPage() {
     handleSectionUpdate(selectedSection.id, { voiceSettings: newSettings });
   };
 
-  const handleGlobalSettingChange = (key: keyof GlobalSettings, value: any) => {
-    setGlobalSettings(prev => ({ ...prev, [key]: value }));
+  const handleGlobalSettingChange = (key: string, value: any) => {
+    updateGlobalSetting(key as any, value);
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,14 +128,12 @@ export default function SegmentsPage() {
   };
 
   const handleBack = () => {
-    window.location.href = '/create';
+    router.push('/create');
   };
 
   const handleContinue = () => {
-    // Save the updated sections and global settings before continuing
-    localStorage.setItem('videoSections', JSON.stringify(sections));
-    localStorage.setItem('globalSettings', JSON.stringify(globalSettings));
-    window.location.href = '/render';
+    // Data is automatically persisted in Zustand store
+    router.push('/render');
   };
 
   const currentVoiceSettings = selectedSection?.voiceSettings || defaultVoiceSettings;
@@ -465,8 +411,8 @@ export default function SegmentsPage() {
                               size="sm"
                               className="absolute top-2 right-2"
                               onClick={() => {
-                                handleGlobalSettingChange('customBackgroundImage', undefined);
-                                handleGlobalSettingChange('background', 'black');
+                                updateGlobalSetting('customBackgroundImage', undefined);
+                                updateGlobalSetting('background', 'black');
                               }}
                             >
                               <X className="h-4 w-4" />

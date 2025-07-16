@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -16,48 +16,33 @@ import {
   Loader2,
   Share2
 } from "lucide-react";
+import { useVideoStore } from "@/lib/store";
+import { useRouter } from 'next/navigation';
 
 export default function RenderPage() {
+  const router = useRouter();
+  const { sections, globalSettings } = useVideoStore();
+  
   const [isRendering, setIsRendering] = useState(false);
   const [renderProgress, setRenderProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [sections, setSections] = useState<any[]>([]);
-  const [globalSettings, setGlobalSettings] = useState<any>({});
   const [projectId, setProjectId] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
 
-  // Load data from localStorage on component mount
-  React.useEffect(() => {
-    const savedSections = localStorage.getItem('videoSections');
-    const savedGlobalSettings = localStorage.getItem('globalSettings');
+  // Load project ID from localStorage and check if data exists
+  useEffect(() => {
     const savedProjectId = localStorage.getItem('projectId');
     
-    if (savedSections) {
-      try {
-        setSections(JSON.parse(savedSections));
-      } catch (error) {
-        console.error('Error parsing saved sections:', error);
-      }
-    }
-    
-    if (savedGlobalSettings) {
-      try {
-        setGlobalSettings(JSON.parse(savedGlobalSettings));
-      } catch (error) {
-        console.error('Error parsing saved global settings:', error);
-      }
-    }
-
     if (savedProjectId) {
       setProjectId(savedProjectId);
     }
 
     // If no sections found, redirect back to create page
-    if (!savedSections || !savedProjectId) {
-      window.location.href = '/create';
+    if (sections.length === 0 || !savedProjectId) {
+      router.push('/create');
     }
-  }, []);
+  }, [sections, router]);
 
   const handleStartRender = async () => {
     if (!projectId) {
@@ -163,7 +148,7 @@ export default function RenderPage() {
   };
 
   const handleBack = () => {
-    window.location.href = '/segments';
+    router.push('/segments');
   };
 
   const handleDownload = async () => {

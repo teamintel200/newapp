@@ -1,0 +1,132 @@
+import { create } from 'zustand'
+
+export interface VoiceSettings {
+  speed: number;
+  gender: 'male' | 'female';
+  accent: 'american' | 'british' | 'australian' | 'canadian';
+}
+
+export interface Section {
+  id: string;
+  title: string;
+  text: string;
+  image?: string;
+  voiceSettings?: VoiceSettings;
+}
+
+export interface GlobalSettings {
+  videoTitle: string;
+  brightness: number;
+  contrast: number;
+  saturation: number;
+  musicVolume: number;
+  voiceVolume: number;
+  watermark: string;
+  aspectRatio: '16:9' | '9:16' | '1:1';
+  outputQuality: 'HD' | 'FHD' | '4K';
+  background: 'black' | 'white' | 'custom';
+  customBackgroundImage?: string;
+}
+
+interface VideoStore {
+  sections: Section[];
+  globalSettings: GlobalSettings;
+  selectedSectionId: string;
+  
+  // Section actions
+  setSections: (sections: Section[]) => void;
+  updateSection: (sectionId: string, updates: Partial<Section>) => void;
+  addSection: (section: Section) => void;
+  removeSection: (sectionId: string) => void;
+  
+  // Global settings actions
+  setGlobalSettings: (settings: GlobalSettings) => void;
+  updateGlobalSetting: <K extends keyof GlobalSettings>(key: K, value: GlobalSettings[K]) => void;
+  
+  // UI state actions
+  setSelectedSectionId: (id: string) => void;
+  
+  // Reset actions
+  reset: () => void;
+}
+
+const defaultGlobalSettings: GlobalSettings = {
+  videoTitle: 'My YouTube Short',
+  brightness: 100,
+  contrast: 100,
+  saturation: 100,
+  musicVolume: 50,
+  voiceVolume: 80,
+  watermark: '',
+  aspectRatio: '9:16',
+  outputQuality: 'FHD',
+  background: 'black',
+  customBackgroundImage: undefined
+};
+
+export const useVideoStore = create<VideoStore>()((set, get) => ({
+  sections: [],
+  globalSettings: defaultGlobalSettings,
+  selectedSectionId: '',
+  
+  setSections: (sections) => {
+    set({ sections });
+    // Auto-select first section if none selected
+    if (sections.length > 0 && !get().selectedSectionId) {
+      set({ selectedSectionId: sections[0].id });
+    }
+  },
+  
+  updateSection: (sectionId, updates) => {
+    set((state) => ({
+      sections: state.sections.map((section) =>
+        section.id === sectionId ? { ...section, ...updates } : section
+      )
+    }));
+  },
+  
+  addSection: (section) => {
+    set((state) => ({
+      sections: [...state.sections, section]
+    }));
+  },
+  
+  removeSection: (sectionId) => {
+    set((state) => {
+      const newSections = state.sections.filter((section) => section.id !== sectionId);
+      const newSelectedId = state.selectedSectionId === sectionId 
+        ? (newSections.length > 0 ? newSections[0].id : '')
+        : state.selectedSectionId;
+      
+      return {
+        sections: newSections,
+        selectedSectionId: newSelectedId
+      };
+    });
+  },
+  
+  setGlobalSettings: (settings) => {
+    set({ globalSettings: settings });
+  },
+  
+  updateGlobalSetting: (key, value) => {
+    set((state) => ({
+      globalSettings: {
+        ...state.globalSettings,
+        [key]: value
+      }
+    }));
+  },
+  
+  setSelectedSectionId: (id) => {
+    set({ selectedSectionId: id });
+  },
+  
+  reset: () => {
+    set({
+      sections: [],
+      globalSettings: defaultGlobalSettings,
+      selectedSectionId: ''
+    });
+  }
+}));

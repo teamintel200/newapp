@@ -5,10 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, ArrowLeft, FileText, Sparkles } from "lucide-react";
+import { useVideoStore } from "@/lib/store";
+import { useRouter } from 'next/navigation';
 
 export default function CreatePage() {
   const [script, setScript] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { setSections, reset } = useVideoStore();
 
   const handleSubmit = async () => {
     if (!script.trim()) return;
@@ -37,13 +41,16 @@ export default function CreatePage() {
         text: line.trim()
       }));
       
-      // Store the sections and project ID in localStorage
-      localStorage.setItem('videoSections', JSON.stringify(sections));
+      // Reset store and set new sections
+      reset();
+      setSections(sections);
+      
+      // Store project ID and original script in localStorage for API calls
       localStorage.setItem('originalScript', script.trim());
       localStorage.setItem('projectId', projectId);
       
       setTimeout(() => {
-        window.location.href = '/segments';
+        router.push('/segments');
       }, 1500);
     } catch (error) {
       console.error('Error creating project:', error);
@@ -54,7 +61,7 @@ export default function CreatePage() {
   };
 
   const handleBack = () => {
-    window.location.href = '/';
+    router.push('/');
   };
 
   const wordCount = script.trim().split(/\s+/).filter(word => word.length > 0).length;
