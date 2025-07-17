@@ -24,7 +24,10 @@ import {
   FileText,
   ArrowLeft,
   ArrowRight,
-  Globe
+  Globe,
+  Menu,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { useVideoStore, VoiceSettings } from '@/lib/store';
 import { useRouter } from 'next/navigation';
@@ -47,6 +50,11 @@ export default function SegmentsPage() {
   const [showGlobalSettings, setShowGlobalSettings] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  
+  // Mobile UI state
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [mobileActiveTab, setMobileActiveTab] = useState<'sections' | 'editor' | 'preview'>('sections');
 
   // Initialize selected section if none selected
   useEffect(() => {
@@ -56,6 +64,18 @@ export default function SegmentsPage() {
       setSelectedSectionId(sections[0].id);
     }
   }, [sections, selectedSectionId, setSelectedSectionId, router]);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const selectedSection = sections.find(s => s.id === selectedSectionId);
 
@@ -169,37 +189,80 @@ export default function SegmentsPage() {
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-6 py-4">
+        <div className={`container mx-auto ${isMobile ? 'px-4 py-3' : 'px-6 py-4'}`}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
               <Button variant="outline" size="sm" onClick={handleBack}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back
+                {isMobile ? '' : 'Back'}
               </Button>
-              <h1 className="text-2xl font-bold">Edit Sections</h1>
+              <h1 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold`}>
+                {isMobile ? 'Edit' : 'Edit Sections'}
+              </h1>
             </div>
-            <Button onClick={handleContinue} className="bg-primary hover:bg-primary/90">
-              Continue to Review
+            <Button onClick={handleContinue} className="bg-primary hover:bg-primary/90" size={isMobile ? 'sm' : 'default'}>
+              {isMobile ? 'Continue' : 'Continue to Review'}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
 
           {/* Progress */}
-          <div className="flex items-center gap-4">
+          <div className={`flex items-center gap-4 ${isMobile ? 'flex-col space-y-2' : ''}`}>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="bg-primary/20 text-primary">2</Badge>
-              <span className="text-sm font-medium">Edit Sections</span>
+              <span className="text-sm font-medium">{isMobile ? 'Edit' : 'Edit Sections'}</span>
             </div>
-            <Progress value={66.67} className="flex-1 max-w-md" />
+            <Progress value={66.67} className={`flex-1 ${isMobile ? 'w-full' : 'max-w-md'}`} />
             <span className="text-sm text-muted-foreground">Step 2 of 3</span>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-12 gap-6 h-[calc(100vh-200px)]">
+      <div className={`container mx-auto ${isMobile ? 'px-4 py-4' : 'px-6 py-8'}`}>
+        {/* Mobile Tab Navigation */}
+        {isMobile && (
+          <div className="mb-6 border-b border-border">
+            <div className="flex space-x-1">
+              <button
+                onClick={() => setMobileActiveTab('sections')}
+                className={`flex-1 py-2 px-4 text-sm font-medium border-b-2 transition-colors ${
+                  mobileActiveTab === 'sections'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <FileText className="h-4 w-4 mx-auto mb-1" />
+                Sections
+              </button>
+              <button
+                onClick={() => setMobileActiveTab('editor')}
+                className={`flex-1 py-2 px-4 text-sm font-medium border-b-2 transition-colors ${
+                  mobileActiveTab === 'editor'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Settings className="h-4 w-4 mx-auto mb-1" />
+                Editor
+              </button>
+              <button
+                onClick={() => setMobileActiveTab('preview')}
+                className={`flex-1 py-2 px-4 text-sm font-medium border-b-2 transition-colors ${
+                  mobileActiveTab === 'preview'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Eye className="h-4 w-4 mx-auto mb-1" />
+                Preview
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className={`${isMobile ? 'block' : 'grid grid-cols-12 gap-6'} h-[calc(100vh-200px)]`}>
           {/* Left Panel - Sections List */}
-          <div className="col-span-3 flex flex-col h-full">
+          <div className={`${isMobile ? (mobileActiveTab === 'sections' ? 'block' : 'hidden') : 'col-span-3'} flex flex-col h-full`}>
             <Card className="h-full flex flex-col">
               <CardHeader className="pb-3 flex-shrink-0">
                 <div className="flex items-center justify-between">
@@ -210,7 +273,12 @@ export default function SegmentsPage() {
                   <Button
                     variant={showGlobalSettings ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setShowGlobalSettings(!showGlobalSettings)}
+                    onClick={() => {
+                      setShowGlobalSettings(!showGlobalSettings);
+                      if (isMobile) {
+                        setMobileActiveTab('editor');
+                      }
+                    }}
                     className={`flex items-center gap-2 transition-all duration-200 ${
                       showGlobalSettings 
                         ? 'shadow-md ring-1 ring-primary/30' 
@@ -226,7 +294,7 @@ export default function SegmentsPage() {
                 {sections.map((section, index) => (
                   <div
                     key={section.id}
-                    className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
+                    className={`${isMobile ? 'p-4' : 'p-3'} rounded-lg border cursor-pointer transition-all duration-200 ${
                       selectedSectionId === section.id && !showGlobalSettings
                         ? 'border-primary bg-primary/20 shadow-md ring-1 ring-primary/30'
                         : 'border-border hover:border-primary/50 hover:bg-muted/70 hover:shadow-sm active:bg-muted/90'
@@ -234,6 +302,9 @@ export default function SegmentsPage() {
                     onClick={() => {
                       setSelectedSectionId(section.id);
                       setShowGlobalSettings(false);
+                      if (isMobile) {
+                        setMobileActiveTab('editor');
+                      }
                     }}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -254,7 +325,7 @@ export default function SegmentsPage() {
           </div>
 
           {/* Center Panel - Section Editor or Global Settings */}
-          <div className="col-span-6 h-full overflow-y-auto">
+          <div className={`${isMobile ? (mobileActiveTab === 'editor' ? 'block' : 'hidden') : 'col-span-6'} h-full overflow-y-auto`}>
             <div className="space-y-6 pb-4">
             {showGlobalSettings ? (
               <>
@@ -658,7 +729,7 @@ export default function SegmentsPage() {
           </div>
 
           {/* Right Panel - Enhanced Preview */}
-          <div className="col-span-3 flex flex-col h-full">
+          <div className={`${isMobile ? (mobileActiveTab === 'preview' ? 'block' : 'hidden') : 'col-span-3'} flex flex-col h-full`}>
             <Card className="h-full flex flex-col">
               <CardHeader className="pb-3 flex-shrink-0">
                 <CardTitle className="text-lg flex items-center gap-2">
