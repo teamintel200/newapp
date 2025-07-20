@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Video, Sparkles, Upload, Settings, Play } from "lucide-react";
+import LanguageSelector from '@/components/LanguageSelector';
 
 export default function Home() {
   const [isCreating, setIsCreating] = useState(false);
+  const t = useTranslations('home');
+  const tc = useTranslations('common');
 
   const handleCreateNew = () => {
     setIsCreating(true);
@@ -27,10 +31,11 @@ export default function Home() {
                 <Video className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">ShortsCreator</h1>
-                <p className="text-sm text-muted-foreground">AI-powered YouTube Shorts generator</p>
+                <h1 className="text-2xl font-bold text-foreground">{t('title')}</h1>
+                <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
               </div>
             </div>
+            <LanguageSelector />
           </div>
         </div>
       </div>
@@ -42,11 +47,10 @@ export default function Home() {
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-2 mb-6">
               <Sparkles className="w-8 h-8 text-primary" />
-              <h2 className="text-4xl font-bold text-foreground">Create Viral YouTube Shorts</h2>
+              <h2 className="text-4xl font-bold text-foreground">{t('title')}</h2>
             </div>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Just enter a topic—our AI handles scriptwriting, voiceovers, visuals, and video editing.
-              Go from idea to finished video in minutes.
+              {t('description')}
             </p>
             
             <Button 
@@ -57,12 +61,12 @@ export default function Home() {
               {isCreating ? (
                 <>
                   <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2" />
-                  Creating...
+                  {tc('loading')}
                 </>
               ) : (
                 <>
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Create New Short
+                  {t('getStarted')}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </>
               )}
@@ -76,9 +80,9 @@ export default function Home() {
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3">
                   <Sparkles className="w-6 h-6 text-primary" />
                 </div>
-                <CardTitle className="text-xl">AI Script Generation</CardTitle>
+                <CardTitle className="text-xl">{t('features.script.title')}</CardTitle>
                 <CardDescription>
-                  Enter any topic and our AI creates engaging, viral-ready scripts tailored for YouTube Shorts.
+                  {t('features.script.description')}
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -88,9 +92,9 @@ export default function Home() {
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3">
                   <Upload className="w-6 h-6 text-primary" />
                 </div>
-                <CardTitle className="text-xl">Smart Segmentation</CardTitle>
+                <CardTitle className="text-xl">{t('features.voice.title')}</CardTitle>
                 <CardDescription>
-                  Automatically break scripts into scenes with custom voiceovers and image uploads for each segment.
+                  {t('features.voice.description')}
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -100,9 +104,9 @@ export default function Home() {
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3">
                   <Play className="w-6 h-6 text-primary" />
                 </div>
-                <CardTitle className="text-xl">Instant Video Render</CardTitle>
+                <CardTitle className="text-xl">{t('features.visual.title')}</CardTitle>
                 <CardDescription>
-                  Combine audio, visuals, and effects into polished YouTube Shorts ready for upload.
+                  {t('features.visual.description')}
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -110,38 +114,38 @@ export default function Home() {
 
           {/* Workflow Steps */}
           <div className="bg-card/50 border border-border rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-center text-foreground mb-8">How It Works</h3>
+            <h3 className="text-2xl font-bold text-center text-foreground mb-8">{t('howItWorks.title')}</h3>
             <div className="grid md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-lg mx-auto mb-4">
                   1
                 </div>
-                <h4 className="font-semibold text-foreground mb-2">Enter Topic</h4>
-                <p className="text-sm text-muted-foreground">Provide a topic or paste your script</p>
+                <h4 className="font-semibold text-foreground mb-2">{t('howItWorks.step1.title')}</h4>
+                <p className="text-sm text-muted-foreground">{t('howItWorks.step1.description')}</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-lg mx-auto mb-4">
                   2
                 </div>
-                <h4 className="font-semibold text-foreground mb-2">Edit Segments</h4>
-                <p className="text-sm text-muted-foreground">Split script, add voice settings & images</p>
+                <h4 className="font-semibold text-foreground mb-2">{t('howItWorks.step2.title')}</h4>
+                <p className="text-sm text-muted-foreground">{t('howItWorks.step2.description')}</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-lg mx-auto mb-4">
                   3
                 </div>
-                <h4 className="font-semibold text-foreground mb-2">Customize</h4>
-                <p className="text-sm text-muted-foreground">Adjust effects, audio, and video settings</p>
+                <h4 className="font-semibold text-foreground mb-2">{t('howItWorks.step2.title')}</h4>
+                <p className="text-sm text-muted-foreground">{t('howItWorks.step2.description')}</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-lg mx-auto mb-4">
                   4
                 </div>
-                <h4 className="font-semibold text-foreground mb-2">Export</h4>
-                <p className="text-sm text-muted-foreground">Download your ready-to-upload Short</p>
+                <h4 className="font-semibold text-foreground mb-2">{t('howItWorks.step3.title')}</h4>
+                <p className="text-sm text-muted-foreground">{t('howItWorks.step3.description')}</p>
               </div>
             </div>
           </div>

@@ -1,0 +1,154 @@
+{
+  "home": {
+    "title": "ShortsCreator",
+    "subtitle": "Tạo YouTube Shorts viral một cách dễ dàng",
+    "description": "Chỉ cần nhập chủ đề—AI của chúng tôi sẽ xử lý việc viết kịch bản, lồng tiếng, hình ảnh và chỉnh sửa video.",
+    "getStarted": "Bắt đầu",
+    "features": {
+      "title": "Tính năng",
+      "script": {
+        "title": "Tạo kịch bản AI",
+        "description": "Tạo kịch bản hấp dẫn với tích hợp OpenAI"
+      },
+      "voice": {
+        "title": "Chuyển văn bản thành giọng nói",
+        "description": "Chuyển đổi kịch bản thành giọng nói tự nhiên"
+      },
+      "visual": {
+        "title": "Trình chỉnh sửa hình ảnh",
+        "description": "Thêm hình ảnh và tùy chỉnh giao diện video"
+      }
+    },
+    "howItWorks": {
+      "title": "Cách hoạt động",
+      "step1": {
+        "title": "Nhập kịch bản",
+        "description": "Viết hoặc dán kịch bản video của bạn"
+      },
+      "step2": {
+        "title": "Tùy chỉnh phần",
+        "description": "Thêm hình ảnh, cài đặt giọng nói và hiệu ứng"
+      },
+      "step3": {
+        "title": "Tạo video",
+        "description": "Tải xuống YouTube Short hoàn thành"
+      }
+    }
+  },
+  "create": {
+    "title": "Nhập kịch bản",
+    "subtitle": "Nhập kịch bản của bạn",
+    "description": "Dán hoặc nhập kịch bản video bên dưới. Chúng tôi sẽ tự động chia thành các cảnh và giúp bạn tạo hình ảnh hấp dẫn cho từng phần.",
+    "placeholder": "Nhập kịch bản video của bạn ở đây...\n\nVí dụ:\nChào mừng đến với demo sản phẩm! Hôm nay tôi sẽ cho bạn thấy ứng dụng cách mạng của chúng tôi có thể thay đổi quy trình công việc hàng ngày của bạn như thế nào.\n\nĐầu tiên, hãy xem bảng điều khiển chính nơi bạn có thể thấy tất cả các dự án trong một cái nhìn. Giao diện sạch sẽ giúp bạn dễ dàng di chuyển giữa các tác vụ khác nhau.\n\nTiếp theo, tôi sẽ trình bày cách tạo dự án mới. Chỉ với vài cú nhấp chuột, bạn có thể thiết lập mọi thứ cần thiết để bắt đầu...",
+    "minCharacters": "Kịch bản phải có ít nhất 50 ký tự ({remaining} ký tự nữa)",
+    "wordCount": "{words} từ · {chars} ký tự",
+    "tips": {
+      "title": "Mẹo viết kịch bản",
+      "tip1": "Viết theo giọng điệu tự nhiên, như đang trò chuyện",
+      "tip2": "Chia những ý tưởng phức tạp thành câu ngắn hơn",
+      "tip3": "Bao gồm các chuyển đổi rõ ràng giữa các chủ đề",
+      "tip4": "Xem xét nơi các yếu tố hình ảnh có thể nâng cao thông điệp"
+    },
+    "back": "Quay lại",
+    "continue": "Tiếp tục đến cảnh",
+    "processing": "Đang xử lý...",
+    "step": "Bước 1 / 3"
+  },
+  "segments": {
+    "title": "Chỉnh sửa phần",
+    "back": "Quay lại",
+    "continue": "Tiếp tục xem lại",
+    "step": "Bước 2 / 3",
+    "sections": "Phần",
+    "global": "Toàn cục",
+    "editor": "Trình chỉnh sửa",
+    "preview": "Xem trước",
+    "globalSettings": {
+      "title": "Cài đặt toàn cục",
+      "videoTitle": "Tiêu đề video",
+      "watermark": "Văn bản watermark",
+      "watermarkPlaceholder": "Văn bản watermark tùy chọn",
+      "backgroundSettings": "Cài đặt nền",
+      "backgroundType": "Loại nền",
+      "backgroundOptions": {
+        "black": "Đen",
+        "white": "Trắng",
+        "custom": "Hình ảnh tùy chỉnh"
+      },
+      "backgroundImage": "Hình nền",
+      "uploadBackground": "Tải lên hình nền",
+      "backgroundPreview": "Xem trước nền"
+    },
+    "sectionEditor": {
+      "title": "Chỉnh sửa phần",
+      "sectionTitle": "Tiêu đề phần",
+      "sectionText": "Văn bản phần",
+      "sectionImage": "Hình ảnh phần",
+      "uploadImage": "Tải lên hình ảnh phần",
+      "dragDrop": "Kéo thả hình ảnh vào đây hoặc nhấp để chọn",
+      "selectImage": "Chọn hình ảnh",
+      "voiceSettings": "Cài đặt giọng nói",
+      "speed": "Tốc độ",
+      "gender": "Giới tính",
+      "accent": "Giọng",
+      "genderOptions": {
+        "female": "Nữ",
+        "male": "Nam"
+      },
+      "accentOptions": {
+        "american": "Mỹ",
+        "british": "Anh",
+        "australian": "Úc",
+        "canadian": "Canada"
+      }
+    },
+    "preview": {
+      "title": "Xem trước",
+      "videoSettings": "Cài đặt video",
+      "aspectRatio": "Tỷ lệ khung hình",
+      "quality": "Chất lượng",
+      "noImageSelected": "Chưa chọn hình ảnh"
+    }
+  },
+  "render": {
+    "title": "Render video",
+    "backToEditing": "Quay lại chỉnh sửa",
+    "step": "Bước 3 / 3",
+    "finalRender": "Render cuối cùng",
+    "videoPreview": "Xem trước video",
+    "renderStatus": "Trạng thái render",
+    "readyToRender": "Sẵn sàng render",
+    "readyDescription": "Video của bạn đã được cấu hình và sẵn sàng render. Quá trình này thường mất 1-2 phút.",
+    "startRendering": "Bắt đầu render",
+    "renderingVideo": "Đang render video...",
+    "estimatedTime": "Thời gian ước tính còn lại: {seconds} giây",
+    "renderComplete": "Render hoàn thành!",
+    "renderCompleteDescription": "YouTube Short của bạn đã sẵn sàng tải xuống và chia sẻ.",
+    "downloadVideo": "Tải xuống video",
+    "share": "Chia sẻ",
+    "videoDetails": "Chi tiết video",
+    "title": "Tiêu đề",
+    "duration": "Thời lượng",
+    "format": "Định dạng",
+    "resolution": "Độ phân giải",
+    "fileSize": "Kích thước tệp",
+    "contentSummary": "Tóm tắt nội dung",
+    "exportOptions": "Tùy chọn xuất",
+    "youtubeShorts": "Cho YouTube Shorts",
+    "youtubeShortsDesc": "Định dạng 9:16 tối ưu, hoàn hảo cho việc tải lên YouTube Shorts",
+    "socialMedia": "Cho mạng xã hội",
+    "socialMediaDesc": "Tương thích với TikTok, Instagram Reels và các nền tảng khác",
+    "highQuality": "Chất lượng cao",
+    "highQualityDesc": "Độ phân giải Full HD với nén tối ưu"
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "close": "Đóng"
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -22,6 +23,8 @@ import { useRouter } from 'next/navigation';
 export default function RenderPage() {
   const router = useRouter();
   const { sections, globalSettings } = useVideoStore();
+  const t = useTranslations('render');
+  const tc = useTranslations('common');
   
   const [isRendering, setIsRendering] = useState(false);
   const [renderProgress, setRenderProgress] = useState(0);
@@ -210,9 +213,9 @@ export default function RenderPage() {
             <div className="flex items-center gap-4">
               <Button variant="outline" size="sm" onClick={handleBack}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Editing
+                {t('backToEditing')}
               </Button>
-              <h1 className="text-2xl font-bold">Render Video</h1>
+              <h1 className="text-2xl font-bold">{t('title')}</h1>
             </div>
           </div>
 
@@ -220,10 +223,10 @@ export default function RenderPage() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="bg-primary/20 text-primary">3</Badge>
-              <span className="text-sm font-medium">Final Render</span>
+              <span className="text-sm font-medium">{t('finalRender')}</span>
             </div>
             <Progress value={100} className="flex-1 max-w-md" />
-            <span className="text-sm text-muted-foreground">Step 3 of 3</span>
+            <span className="text-sm text-muted-foreground">{t('step')}</span>
           </div>
         </div>
       </div>
@@ -237,7 +240,7 @@ export default function RenderPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Video className="h-5 w-5" />
-                    Video Preview
+                    {t('videoPreview')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -270,7 +273,7 @@ export default function RenderPage() {
                       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                         <div className="text-center text-white">
                           <Loader2 className="w-8 h-8 mx-auto mb-4 animate-spin" />
-                          <p className="text-sm">Rendering video...</p>
+                          <p className="text-sm">{t('renderingVideo')}</p>
                           <p className="text-xs opacity-80">{Math.round(renderProgress)}% complete</p>
                         </div>
                       </div>
@@ -302,38 +305,38 @@ export default function RenderPage() {
               {/* Render Status */}
               <Card className="mt-6">
                 <CardHeader>
-                  <CardTitle>Render Status</CardTitle>
+                  <CardTitle>{t('renderStatus')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {!isComplete && !isRendering ? (
                     <div className="text-center py-8">
                       <Video className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                      <h3 className="text-lg font-semibold mb-2">Ready to Render</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t('readyToRender')}</h3>
                       <p className="text-muted-foreground mb-6">
-                        Your video is configured and ready to be rendered. This process typically takes 1-2 minutes.
+                        {t('readyDescription')}
                       </p>
                       <Button onClick={handleStartRender} className="bg-primary hover:bg-primary/90">
                         <Video className="w-4 h-4 mr-2" />
-                        Start Rendering
+                        {t('startRendering')}
                       </Button>
                     </div>
                   ) : isRendering ? (
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
                         <Loader2 className="w-5 h-5 animate-spin text-primary" />
-                        <span className="font-medium">Rendering your video...</span>
+                        <span className="font-medium">{t('renderingVideo')}</span>
                       </div>
                       <Progress value={renderProgress} className="w-full" />
                       <div className="text-sm text-muted-foreground">
-                        {Math.round(renderProgress)}% complete • Estimated time remaining: {Math.max(0, Math.round((100 - renderProgress) / 10))} seconds
+                        {Math.round(renderProgress)}% complete • {t('estimatedTime', {seconds: Math.max(0, Math.round((100 - renderProgress) / 10))})}
                       </div>
                     </div>
                   ) : (
                     <div className="text-center py-4">
                       <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-500" />
-                      <h3 className="text-lg font-semibold mb-2">Render Complete!</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t('renderComplete')}</h3>
                       <p className="text-muted-foreground mb-6">
-                        Your YouTube Short is ready for download and sharing.
+                        {t('renderCompleteDescription')}
                       </p>
                       <div className="flex items-center justify-center gap-4">
                         <Button 
@@ -342,11 +345,11 @@ export default function RenderPage() {
                           className="bg-primary hover:bg-primary/90"
                         >
                           <Download className="w-4 h-4 mr-2" />
-                          Download Video
+                          {t('downloadVideo')}
                         </Button>
                         <Button variant="outline">
                           <Share2 className="w-4 h-4 mr-2" />
-                          Share
+                          {t('share')}
                         </Button>
                       </div>
                     </div>
@@ -360,24 +363,24 @@ export default function RenderPage() {
               {/* Video Information */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Video Details</CardTitle>
+                  <CardTitle>{t('videoDetails')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Title:</span>
+                      <span className="text-muted-foreground">{t('title')}:</span>
                       <span className="font-medium">{videoTitle}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Duration:</span>
+                      <span className="text-muted-foreground">{t('duration')}:</span>
                       <span className="font-medium">{totalDuration} seconds</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Format:</span>
+                      <span className="text-muted-foreground">{t('format')}:</span>
                       <span className="font-medium">MP4</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Resolution:</span>
+                      <span className="text-muted-foreground">{t('resolution')}:</span>
                       <span className="font-medium">
                         {aspectRatio === '9:16' ? '1080x1920' : aspectRatio === '16:9' ? '1920x1080' : '1080x1080'} ({aspectRatio})
                       </span>
@@ -387,7 +390,7 @@ export default function RenderPage() {
                       <span className="font-medium">{outputQuality === 'FHD' ? 'Full HD' : outputQuality}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">File Size:</span>
+                      <span className="text-muted-foreground">{t('fileSize')}:</span>
                       <span className="font-medium">~{Math.ceil(totalDuration * 0.8)} MB</span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -401,7 +404,7 @@ export default function RenderPage() {
               {/* Sections Summary */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Content Summary</CardTitle>
+                  <CardTitle>{t('contentSummary')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -426,25 +429,25 @@ export default function RenderPage() {
               {/* Export Options */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Export Options</CardTitle>
+                  <CardTitle>{t('exportOptions')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="p-3 bg-muted/30 rounded-lg">
-                    <h4 className="text-sm font-medium mb-1">🎬 For YouTube Shorts</h4>
+                    <h4 className="text-sm font-medium mb-1">🎬 {t('youtubeShorts')}</h4>
                     <p className="text-xs text-muted-foreground">
-                      Optimized 9:16 format, perfect for YouTube Shorts upload
+                      {t('youtubeShortsDesc')}
                     </p>
                   </div>
                   <div className="p-3 bg-muted/30 rounded-lg">
-                    <h4 className="text-sm font-medium mb-1">📱 For Social Media</h4>
+                    <h4 className="text-sm font-medium mb-1">📱 {t('socialMedia')}</h4>
                     <p className="text-xs text-muted-foreground">
-                      Compatible with TikTok, Instagram Reels, and other platforms
+                      {t('socialMediaDesc')}
                     </p>
                   </div>
                   <div className="p-3 bg-muted/30 rounded-lg">
-                    <h4 className="text-sm font-medium mb-1">💾 High Quality</h4>
+                    <h4 className="text-sm font-medium mb-1">💾 {t('highQuality')}</h4>
                     <p className="text-xs text-muted-foreground">
-                      Full HD resolution with optimized compression
+                      {t('highQualityDesc')}
                     </p>
                   </div>
                 </CardContent>

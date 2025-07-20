@@ -38,6 +38,7 @@ interface VideoStore {
   updateSection: (sectionId: string, updates: Partial<Section>) => void;
   addSection: (section: Section) => void;
   removeSection: (sectionId: string) => void;
+  mergeSections: (currentSectionId: string) => void;
   
   // Global settings actions
   setGlobalSettings: (settings: GlobalSettings) => void;
@@ -96,6 +97,41 @@ export const useVideoStore = create<VideoStore>()((set, get) => ({
       const newSections = state.sections.filter((section) => section.id !== sectionId);
       const newSelectedId = state.selectedSectionId === sectionId 
         ? (newSections.length > 0 ? newSections[0].id : '')
+        : state.selectedSectionId;
+      
+      return {
+        sections: newSections,
+        selectedSectionId: newSelectedId
+      };
+    });
+  },
+  
+  mergeSections: (currentSectionId) => {
+    set((state) => {
+      const currentIndex = state.sections.findIndex(section => section.id === currentSectionId);
+      
+      // Can't merge if it's the first section or section not found
+      if (currentIndex <= 0) return state;
+      
+      const previousSection = state.sections[currentIndex - 1];
+      const currentSection = state.sections[currentIndex];
+      
+      // Create merged section with combined text and previous section's metadata
+      const mergedSection: Section = {
+        ...previousSection, // Keep previous section's metadata (title, image, voiceSettings)
+        text: `${previousSection.text} ${currentSection.text}`.trim()
+      };
+      
+      // Create new sections array without current section and with updated previous section
+      const newSections = [
+        ...state.sections.slice(0, currentIndex - 1),
+        mergedSection,
+        ...state.sections.slice(currentIndex + 1)
+      ];
+      
+      // Update selected section to the merged one
+      const newSelectedId = state.selectedSectionId === currentSectionId 
+        ? previousSection.id 
         : state.selectedSectionId;
       
       return {

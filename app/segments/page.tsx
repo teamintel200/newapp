@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -34,6 +35,8 @@ import { useRouter } from 'next/navigation';
 
 export default function SegmentsPage() {
   const router = useRouter();
+  const t = useTranslations('segments');
+  const tc = useTranslations('common');
   
   // Use Zustand store
   const {
@@ -43,7 +46,8 @@ export default function SegmentsPage() {
     setSections,
     updateSection,
     updateGlobalSetting,
-    setSelectedSectionId
+    setSelectedSectionId,
+    mergeSections
   } = useVideoStore();
 
   // Local UI state
@@ -194,14 +198,14 @@ export default function SegmentsPage() {
             <div className="flex items-center gap-4">
               <Button variant="outline" size="sm" onClick={handleBack}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                {isMobile ? '' : 'Back'}
+                {isMobile ? '' : t('back')}
               </Button>
               <h1 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold`}>
-                {isMobile ? 'Edit' : 'Edit Sections'}
+                {isMobile ? t('editor') : t('title')}
               </h1>
             </div>
             <Button onClick={handleContinue} className="bg-primary hover:bg-primary/90" size={isMobile ? 'sm' : 'default'}>
-              {isMobile ? 'Continue' : 'Continue to Review'}
+              {isMobile ? t('continue') : t('continue')}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
@@ -210,10 +214,10 @@ export default function SegmentsPage() {
           <div className={`flex items-center gap-4 ${isMobile ? 'flex-col space-y-2' : ''}`}>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="bg-primary/20 text-primary">2</Badge>
-              <span className="text-sm font-medium">{isMobile ? 'Edit' : 'Edit Sections'}</span>
+              <span className="text-sm font-medium">{isMobile ? t('editor') : t('title')}</span>
             </div>
             <Progress value={66.67} className={`flex-1 ${isMobile ? 'w-full' : 'max-w-md'}`} />
-            <span className="text-sm text-muted-foreground">Step 2 of 3</span>
+            <span className="text-sm text-muted-foreground">{t('step')}</span>
           </div>
         </div>
       </div>
@@ -232,7 +236,7 @@ export default function SegmentsPage() {
                 }`}
               >
                 <FileText className="h-4 w-4 mx-auto mb-1" />
-                Sections
+                {t('sections')}
               </button>
               <button
                 onClick={() => setMobileActiveTab('editor')}
@@ -243,7 +247,7 @@ export default function SegmentsPage() {
                 }`}
               >
                 <Settings className="h-4 w-4 mx-auto mb-1" />
-                Editor
+                {t('editor')}
               </button>
               <button
                 onClick={() => setMobileActiveTab('preview')}
@@ -254,7 +258,7 @@ export default function SegmentsPage() {
                 }`}
               >
                 <Eye className="h-4 w-4 mx-auto mb-1" />
-                Preview
+                {t('preview')}
               </button>
             </div>
           </div>
@@ -268,7 +272,7 @@ export default function SegmentsPage() {
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
                     <FileText className="h-5 w-5" />
-                    Sections ({sections.length})
+                    {t('sections')} ({sections.length})
                   </CardTitle>
                   <Button
                     variant={showGlobalSettings ? "default" : "outline"}
@@ -286,7 +290,7 @@ export default function SegmentsPage() {
                     }`}
                   >
                     <Globe className="h-4 w-4" />
-                    Global
+                    {t('global')}
                   </Button>
                 </div>
               </CardHeader>
@@ -294,7 +298,7 @@ export default function SegmentsPage() {
                 {sections.map((section, index) => (
                   <div
                     key={section.id}
-                    className={`${isMobile ? 'p-4' : 'p-3'} rounded-lg border cursor-pointer transition-all duration-200 ${
+                    className={`relative ${isMobile ? 'p-4' : 'p-3'} rounded-lg border cursor-pointer transition-all duration-200 ${
                       selectedSectionId === section.id && !showGlobalSettings
                         ? 'border-primary bg-primary/20 shadow-md ring-1 ring-primary/30'
                         : 'border-border hover:border-primary/50 hover:bg-muted/70 hover:shadow-sm active:bg-muted/90'
@@ -307,6 +311,20 @@ export default function SegmentsPage() {
                       }
                     }}
                   >
+                    {/* Merge Button - Only show for sections after the first one */}
+                    {index > 0 && (
+                      <button
+                        className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-background border border-border rounded-full flex items-center justify-center hover:bg-primary hover:border-primary hover:text-primary-foreground transition-all duration-200 shadow-sm hover:shadow-md z-10"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent triggering section selection
+                          mergeSections(section.id);
+                        }}
+                        title={`Merge with previous section`}
+                      >
+                        <ChevronUp className="h-3 w-3" />
+                      </button>
+                    )}
+                    
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant={selectedSectionId === section.id && !showGlobalSettings ? "default" : "secondary"} className="text-xs">
                         {index + 1}
@@ -334,12 +352,12 @@ export default function SegmentsPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Globe className="h-5 w-5" />
-                      Global Settings
+                      {t('globalSettings.title')}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div>
-                      <Label htmlFor="video-title">Video Title</Label>
+                      <Label htmlFor="video-title">{t('globalSettings.videoTitle')}</Label>
                       <Input
                         id="video-title"
                         value={globalSettings.videoTitle}
@@ -349,12 +367,12 @@ export default function SegmentsPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="watermark">Watermark Text</Label>
+                      <Label htmlFor="watermark">{t('globalSettings.watermark')}</Label>
                       <Input
                         id="watermark"
                         value={globalSettings.watermark}
                         onChange={(e) => handleGlobalSettingChange('watermark', e.target.value)}
-                        placeholder="Optional watermark text"
+                        placeholder={t('globalSettings.watermarkPlaceholder')}
                         className="mt-1"
                       />
                     </div>
@@ -447,11 +465,11 @@ export default function SegmentsPage() {
                 {/* Background Settings */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Background Settings</CardTitle>
+                    <CardTitle>{t('globalSettings.backgroundSettings')}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div>
-                      <Label>Background Type</Label>
+                      <Label>{t('globalSettings.backgroundType')}</Label>
                       <Select
                         value={globalSettings.background}
                         onValueChange={(value) => handleGlobalSettingChange('background', value)}
@@ -460,16 +478,16 @@ export default function SegmentsPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="black">Black</SelectItem>
-                          <SelectItem value="white">White</SelectItem>
-                          <SelectItem value="custom">Custom Image</SelectItem>
+                          <SelectItem value="black">{t('globalSettings.backgroundOptions.black')}</SelectItem>
+                          <SelectItem value="white">{t('globalSettings.backgroundOptions.white')}</SelectItem>
+                          <SelectItem value="custom">{t('globalSettings.backgroundOptions.custom')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     {globalSettings.background === 'custom' && (
                       <div>
-                        <Label>Background Image</Label>
+                        <Label>{t('globalSettings.backgroundImage')}</Label>
                         {globalSettings.customBackgroundImage ? (
                           <div className="relative mt-2">
                             <img
@@ -501,7 +519,7 @@ export default function SegmentsPage() {
                             <Button asChild variant="outline" className="w-full">
                               <label htmlFor="background-upload" className="cursor-pointer">
                                 <Upload className="h-4 w-4 mr-2" />
-                                Upload Background Image
+                                {t('globalSettings.uploadBackground')}
                               </label>
                             </Button>
                           </div>
@@ -511,7 +529,7 @@ export default function SegmentsPage() {
 
                     {/* Background Preview */}
                     <div>
-                      <Label>Background Preview</Label>
+                      <Label>{t('globalSettings.backgroundPreview')}</Label>
                       <div 
                         className="mt-2 h-20 rounded-lg border flex items-center justify-center text-sm transition-all duration-200 hover:shadow-md hover:border-primary/30"
                         style={{
@@ -524,10 +542,10 @@ export default function SegmentsPage() {
                           color: globalSettings.background === 'white' ? '#000000' : '#ffffff'
                         }}
                       >
-                        {globalSettings.background === 'black' && 'Black Background'}
-                        {globalSettings.background === 'white' && 'White Background'}
-                        {globalSettings.background === 'custom' && !globalSettings.customBackgroundImage && 'No image selected'}
-                        {globalSettings.background === 'custom' && globalSettings.customBackgroundImage && 'Custom Background'}
+                        {globalSettings.background === 'black' && t('globalSettings.backgroundOptions.black') + ' Background'}
+                        {globalSettings.background === 'white' && t('globalSettings.backgroundOptions.white') + ' Background'}
+                        {globalSettings.background === 'custom' && !globalSettings.customBackgroundImage && t('preview.noImageSelected')}
+                        {globalSettings.background === 'custom' && globalSettings.customBackgroundImage && t('globalSettings.backgroundOptions.custom') + ' Background'}
                       </div>
                     </div>
                   </CardContent>
@@ -578,12 +596,12 @@ export default function SegmentsPage() {
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                           <Settings className="h-5 w-5" />
-                          Edit Section: {selectedSection.title}
+                          {t('sectionEditor.title')}: {selectedSection.title}
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div>
-                          <Label htmlFor="section-title">Section Title</Label>
+                          <Label htmlFor="section-title">{t('sectionEditor.sectionTitle')}</Label>
                           <Input
                             id="section-title"
                             value={selectedSection.title}
@@ -592,7 +610,7 @@ export default function SegmentsPage() {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="section-text">Section Text</Label>
+                          <Label htmlFor="section-text">{t('sectionEditor.sectionText')}</Label>
                           <Textarea
                             id="section-text"
                             value={selectedSection.text}
@@ -608,7 +626,7 @@ export default function SegmentsPage() {
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                           <ImageIcon className="h-5 w-5" />
-                          Section Image
+                          {t('sectionEditor.sectionImage')}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -641,9 +659,9 @@ export default function SegmentsPage() {
                             onDrop={handleDrop}
                           >
                             <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                            <p className="text-lg font-medium mb-2">Upload Section Image</p>
+                            <p className="text-lg font-medium mb-2">{t('sectionEditor.uploadImage')}</p>
                             <p className="text-sm text-muted-foreground mb-4">
-                              Drag and drop an image here, or click to select
+                              {t('sectionEditor.dragDrop')}
                             </p>
                             <input
                               type="file"
@@ -654,7 +672,7 @@ export default function SegmentsPage() {
                             />
                             <Button asChild variant="outline">
                               <label htmlFor="image-upload" className="cursor-pointer">
-                                Select Image
+                                {t('sectionEditor.selectImage')}
                               </label>
                             </Button>
                           </div>
@@ -667,12 +685,12 @@ export default function SegmentsPage() {
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                           <Volume2 className="h-5 w-5" />
-                          Voice Settings
+                          {t('sectionEditor.voiceSettings')}
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-6">
                         <div>
-                          <Label>Speed: {currentVoiceSettings.speed}x</Label>
+                          <Label>{t('sectionEditor.speed')}: {currentVoiceSettings.speed}x</Label>
                           <Slider
                             value={[currentVoiceSettings.speed]}
                             onValueChange={([value]) => handleVoiceSettingChange('speed', value)}
@@ -685,7 +703,7 @@ export default function SegmentsPage() {
                         
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <Label>Gender</Label>
+                            <Label>{t('sectionEditor.gender')}</Label>
                             <Select
                               value={currentVoiceSettings.gender}
                               onValueChange={(value) => handleVoiceSettingChange('gender', value)}
@@ -694,14 +712,14 @@ export default function SegmentsPage() {
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="female">Female</SelectItem>
-                                <SelectItem value="male">Male</SelectItem>
+                                <SelectItem value="female">{t('sectionEditor.genderOptions.female')}</SelectItem>
+                                <SelectItem value="male">{t('sectionEditor.genderOptions.male')}</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
                           
                           <div>
-                            <Label>Accent</Label>
+                            <Label>{t('sectionEditor.accent')}</Label>
                             <Select
                               value={currentVoiceSettings.accent}
                               onValueChange={(value) => handleVoiceSettingChange('accent', value)}
@@ -710,10 +728,10 @@ export default function SegmentsPage() {
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="american">American</SelectItem>
-                                <SelectItem value="british">British</SelectItem>
-                                <SelectItem value="australian">Australian</SelectItem>
-                                <SelectItem value="canadian">Canadian</SelectItem>
+                                <SelectItem value="american">{t('sectionEditor.accentOptions.american')}</SelectItem>
+                                <SelectItem value="british">{t('sectionEditor.accentOptions.british')}</SelectItem>
+                                <SelectItem value="australian">{t('sectionEditor.accentOptions.australian')}</SelectItem>
+                                <SelectItem value="canadian">{t('sectionEditor.accentOptions.canadian')}</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
@@ -734,7 +752,7 @@ export default function SegmentsPage() {
               <CardHeader className="pb-3 flex-shrink-0">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Eye className="h-5 w-5" />
-                  Preview
+                  {t('preview.title')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 overflow-y-auto flex-1 min-h-0">
@@ -752,7 +770,7 @@ export default function SegmentsPage() {
                     </div>
                     
                     <div className="space-y-3">
-                      <h3 className="font-semibold">Global Settings Summary</h3>
+                      <h3 className="font-semibold">{t('globalSettings.title')} Summary</h3>
                       <div className="space-y-2 text-sm">
                         {/* Hidden: Video effects and audio settings - backend not implemented */}
                         <div className="hidden">
@@ -781,7 +799,7 @@ export default function SegmentsPage() {
                       
                       {globalSettings.watermark && (
                         <div className="p-3 bg-muted rounded-lg">
-                          <h4 className="text-sm font-medium mb-1">Watermark</h4>
+                          <h4 className="text-sm font-medium mb-1">{t('globalSettings.watermark')}</h4>
                           <p className="text-xs text-muted-foreground">{globalSettings.watermark}</p>
                         </div>
                       )}
@@ -871,7 +889,7 @@ export default function SegmentsPage() {
                                   {selectedSection.text}
                                 </p>
                                 <p className="text-xs opacity-70">
-                                  No image selected
+                                  {t('preview.noImageSelected')}
                                 </p>
                               </div>
                             </div>
@@ -928,10 +946,10 @@ export default function SegmentsPage() {
                       {/* Enhanced details with aspect ratio info */}
                       <div className="space-y-2">
                         <div className="p-3 bg-muted rounded-lg">
-                          <h4 className="text-sm font-medium mb-2">Video Settings</h4>
+                          <h4 className="text-sm font-medium mb-2">{t('preview.videoSettings')}</h4>
                           <div className="space-y-1 text-xs text-muted-foreground">
-                            <div>Aspect Ratio: {globalSettings.aspectRatio}</div>
-                            <div>Quality: {globalSettings.outputQuality}</div>
+                            <div>{t('preview.aspectRatio')}: {globalSettings.aspectRatio}</div>
+                            <div>{t('preview.quality')}: {globalSettings.outputQuality}</div>
                             {/* Hidden: Video effects - backend not implemented */}
                             {/* <div>Effects: {globalSettings.brightness}% brightness, {globalSettings.contrast}% contrast</div> */}
                           </div>
@@ -939,11 +957,11 @@ export default function SegmentsPage() {
 
                         {selectedSection.voiceSettings && (
                           <div className="p-3 bg-muted rounded-lg">
-                            <h4 className="text-sm font-medium mb-2">Voice Settings</h4>
+                            <h4 className="text-sm font-medium mb-2">{t('sectionEditor.voiceSettings')}</h4>
                             <div className="space-y-1 text-xs text-muted-foreground">
-                              <div>Speed: {selectedSection.voiceSettings.speed}x</div>
-                              <div>Gender: {selectedSection.voiceSettings.gender}</div>
-                              <div>Accent: {selectedSection.voiceSettings.accent}</div>
+                              <div>{t('sectionEditor.speed')}: {selectedSection.voiceSettings.speed}x</div>
+                              <div>{t('sectionEditor.gender')}: {selectedSection.voiceSettings.gender}</div>
+                              <div>{t('sectionEditor.accent')}: {selectedSection.voiceSettings.accent}</div>
                             </div>
                           </div>
                         )}

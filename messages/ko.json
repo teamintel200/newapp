@@ -1,0 +1,154 @@
+{
+  "home": {
+    "title": "ShortsCreator",
+    "subtitle": "유튜브 쇼츠를 쉽게 만들어보세요",
+    "description": "주제만 입력하면 AI가 스크립트 작성, 음성 녹음, 비주얼, 비디오 편집을 모두 처리합니다.",
+    "getStarted": "시작하기",
+    "features": {
+      "title": "기능",
+      "script": {
+        "title": "AI 스크립트 생성",
+        "description": "OpenAI 연동으로 매력적인 스크립트를 생성합니다"
+      },
+      "voice": {
+        "title": "텍스트 음성 변환",
+        "description": "자연스러운 음성으로 스크립트를 변환합니다"
+      },
+      "visual": {
+        "title": "비주얼 에디터",
+        "description": "이미지를 추가하고 비디오 모양을 커스터마이즈합니다"
+      }
+    },
+    "howItWorks": {
+      "title": "작동 방식",
+      "step1": {
+        "title": "스크립트 입력",
+        "description": "비디오 스크립트를 작성하거나 붙여넣기"
+      },
+      "step2": {
+        "title": "섹션 커스터마이즈",
+        "description": "이미지, 음성 설정, 효과 추가"
+      },
+      "step3": {
+        "title": "비디오 생성",
+        "description": "완성된 유튜브 쇼츠를 다운로드"
+      }
+    }
+  },
+  "create": {
+    "title": "스크립트 입력",
+    "subtitle": "스크립트를 입력하세요",
+    "description": "아래에 비디오 스크립트를 붙여넣거나 입력하세요. 각 섹션으로 자동 분할하여 매력적인 비주얼을 만들 수 있도록 도와드립니다.",
+    "placeholder": "여기에 비디오 스크립트를 입력하세요...\n\n예시:\n제품 데모에 오신 것을 환영합니다! 오늘은 혁신적인 앱이 어떻게 여러분의 일상 업무를 변화시킬 수 있는지 보여드리겠습니다.\n\n먼저 모든 프로젝트를 한눈에 볼 수 있는 메인 대시보드를 살펴보겠습니다. 깔끔한 인터페이스로 다양한 작업 간 이동이 쉽습니다.\n\n다음으로는 새 프로젝트를 만드는 방법을 보여드리겠습니다. 몇 번의 클릭만으로 시작에 필요한 모든 것을 설정할 수 있습니다...",
+    "minCharacters": "스크립트는 최소 50자 이상이어야 합니다 ({remaining}자 더 필요)",
+    "wordCount": "{words}단어 · {chars}자",
+    "tips": {
+      "title": "스크립트 팁",
+      "tip1": "대화하는 듯한 자연스러운 톤으로 작성하세요",
+      "tip2": "복잡한 아이디어를 짧은 문장으로 나누세요",
+      "tip3": "주제 간 명확한 전환을 포함하세요",
+      "tip4": "비주얼 요소가 메시지를 향상시킬 수 있는 부분을 고려하세요"
+    },
+    "back": "뒤로",
+    "continue": "장면으로 계속",
+    "processing": "처리 중...",
+    "step": "1단계 / 3단계"
+  },
+  "segments": {
+    "title": "섹션 편집",
+    "back": "뒤로",
+    "continue": "검토로 계속",
+    "step": "2단계 / 3단계",
+    "sections": "섹션",
+    "global": "전역",
+    "editor": "편집기",
+    "preview": "미리보기",
+    "globalSettings": {
+      "title": "전역 설정",
+      "videoTitle": "비디오 제목",
+      "watermark": "워터마크 텍스트",
+      "watermarkPlaceholder": "선택적 워터마크 텍스트",
+      "backgroundSettings": "배경 설정",
+      "backgroundType": "배경 타입",
+      "backgroundOptions": {
+        "black": "검정",
+        "white": "흰색",
+        "custom": "사용자 지정 이미지"
+      },
+      "backgroundImage": "배경 이미지",
+      "uploadBackground": "배경 이미지 업로드",
+      "backgroundPreview": "배경 미리보기"
+    },
+    "sectionEditor": {
+      "title": "섹션 편집",
+      "sectionTitle": "섹션 제목",
+      "sectionText": "섹션 텍스트",
+      "sectionImage": "섹션 이미지",
+      "uploadImage": "섹션 이미지 업로드",
+      "dragDrop": "이미지를 여기에 드래그하거나 클릭하여 선택하세요",
+      "selectImage": "이미지 선택",
+      "voiceSettings": "음성 설정",
+      "speed": "속도",
+      "gender": "성별",
+      "accent": "억양",
+      "genderOptions": {
+        "female": "여성",
+        "male": "남성"
+      },
+      "accentOptions": {
+        "american": "미국",
+        "british": "영국",
+        "australian": "호주",
+        "canadian": "캐나다"
+      }
+    },
+    "preview": {
+      "title": "미리보기",
+      "videoSettings": "비디오 설정",
+      "aspectRatio": "화면 비율",
+      "quality": "품질",
+      "noImageSelected": "이미지가 선택되지 않음"
+    }
+  },
+  "render": {
+    "title": "비디오 렌더링",
+    "backToEditing": "편집으로 돌아가기",
+    "step": "3단계 / 3단계",
+    "finalRender": "최종 렌더링",
+    "videoPreview": "비디오 미리보기",
+    "renderStatus": "렌더링 상태",
+    "readyToRender": "렌더링 준비 완료",
+    "readyDescription": "비디오가 구성되어 렌더링할 준비가 되었습니다. 이 과정은 보통 1-2분 소요됩니다.",
+    "startRendering": "렌더링 시작",
+    "renderingVideo": "비디오 렌더링 중...",
+    "estimatedTime": "예상 남은 시간: {seconds}초",
+    "renderComplete": "렌더링 완료!",
+    "renderCompleteDescription": "유튜브 쇼츠가 다운로드 및 공유 준비가 완료되었습니다.",
+    "downloadVideo": "비디오 다운로드",
+    "share": "공유",
+    "videoDetails": "비디오 세부사항",
+    "title": "제목",
+    "duration": "길이",
+    "format": "형식",
+    "resolution": "해상도",
+    "fileSize": "파일 크기",
+    "contentSummary": "콘텐츠 요약",
+    "exportOptions": "내보내기 옵션",
+    "youtubeShorts": "유튜브 쇼츠용",
+    "youtubeShortsDesc": "유튜브 쇼츠 업로드에 최적화된 9:16 형식",
+    "socialMedia": "소셜 미디어용",
+    "socialMediaDesc": "TikTok, Instagram Reels 및 기타 플랫폼과 호환",
+    "highQuality": "고품질",
+    "highQualityDesc": "최적화된 압축으로 Full HD 해상도"
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류",
+    "success": "성공",
+    "cancel": "취소",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "편집",
+    "close": "닫기"
+  }
+}

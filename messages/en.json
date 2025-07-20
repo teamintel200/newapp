@@ -1,0 +1,154 @@
+{
+  "home": {
+    "title": "ShortsCreator",
+    "subtitle": "Create viral YouTube Shorts effortlessly",
+    "description": "Just enter a topic—our AI handles scriptwriting, voiceovers, visuals, and video editing.",
+    "getStarted": "Get Started",
+    "features": {
+      "title": "Features",
+      "script": {
+        "title": "AI Script Generation",
+        "description": "Generate engaging scripts with OpenAI integration"
+      },
+      "voice": {
+        "title": "Text-to-Speech",
+        "description": "Convert your script to natural-sounding voice"
+      },
+      "visual": {
+        "title": "Visual Editor",
+        "description": "Add images and customize your video appearance"
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "step1": {
+        "title": "Enter Your Script",
+        "description": "Write or paste your video script"
+      },
+      "step2": {
+        "title": "Customize Sections",
+        "description": "Add images, voice settings, and effects"
+      },
+      "step3": {
+        "title": "Generate Video",
+        "description": "Download your finished YouTube Short"
+      }
+    }
+  },
+  "create": {
+    "title": "Script Input",
+    "subtitle": "Enter Your Script",
+    "description": "Paste or type your video script below. We'll automatically break it down into scenes and help you create engaging visuals for each section.",
+    "placeholder": "Enter your video script here...\n\nFor example:\nWelcome to our product demo! Today I'll show you how our revolutionary new app can transform your daily workflow.\n\nFirst, let's look at the main dashboard where you can see all your projects at a glance. The clean interface makes it easy to navigate between different tasks.\n\nNext, I'll demonstrate how to create a new project. With just a few clicks, you can set up everything you need to get started...",
+    "minCharacters": "Script must be at least 50 characters long ({remaining} more needed)",
+    "wordCount": "{words} words · {chars} characters",
+    "tips": {
+      "title": "Script Tips",
+      "tip1": "Write in a conversational, natural tone",
+      "tip2": "Break complex ideas into shorter sentences",
+      "tip3": "Include clear transitions between topics",
+      "tip4": "Consider where visual elements would enhance your message"
+    },
+    "back": "Back",
+    "continue": "Continue to Scenes",
+    "processing": "Processing...",
+    "step": "Step 1 of 3"
+  },
+  "segments": {
+    "title": "Edit Sections",
+    "back": "Back",
+    "continue": "Continue to Review",
+    "step": "Step 2 of 3",
+    "sections": "Sections",
+    "global": "Global",
+    "editor": "Editor",
+    "preview": "Preview",
+    "globalSettings": {
+      "title": "Global Settings",
+      "videoTitle": "Video Title",
+      "watermark": "Watermark Text",
+      "watermarkPlaceholder": "Optional watermark text",
+      "backgroundSettings": "Background Settings",
+      "backgroundType": "Background Type",
+      "backgroundOptions": {
+        "black": "Black",
+        "white": "White",
+        "custom": "Custom Image"
+      },
+      "backgroundImage": "Background Image",
+      "uploadBackground": "Upload Background Image",
+      "backgroundPreview": "Background Preview"
+    },
+    "sectionEditor": {
+      "title": "Edit Section",
+      "sectionTitle": "Section Title",
+      "sectionText": "Section Text",
+      "sectionImage": "Section Image",
+      "uploadImage": "Upload Section Image",
+      "dragDrop": "Drag and drop an image here, or click to select",
+      "selectImage": "Select Image",
+      "voiceSettings": "Voice Settings",
+      "speed": "Speed",
+      "gender": "Gender",
+      "accent": "Accent",
+      "genderOptions": {
+        "female": "Female",
+        "male": "Male"
+      },
+      "accentOptions": {
+        "american": "American",
+        "british": "British",
+        "australian": "Australian",
+        "canadian": "Canadian"
+      }
+    },
+    "preview": {
+      "title": "Preview",
+      "videoSettings": "Video Settings",
+      "aspectRatio": "Aspect Ratio",
+      "quality": "Quality",
+      "noImageSelected": "No image selected"
+    }
+  },
+  "render": {
+    "title": "Render Video",
+    "backToEditing": "Back to Editing",
+    "step": "Step 3 of 3",
+    "finalRender": "Final Render",
+    "videoPreview": "Video Preview",
+    "renderStatus": "Render Status",
+    "readyToRender": "Ready to Render",
+    "readyDescription": "Your video is configured and ready to be rendered. This process typically takes 1-2 minutes.",
+    "startRendering": "Start Rendering",
+    "renderingVideo": "Rendering your video...",
+    "estimatedTime": "Estimated time remaining: {seconds} seconds",
+    "renderComplete": "Render Complete!",
+    "renderCompleteDescription": "Your YouTube Short is ready for download and sharing.",
+    "downloadVideo": "Download Video",
+    "share": "Share",
+    "videoDetails": "Video Details",
+    "title": "Title",
+    "duration": "Duration",
+    "format": "Format",
+    "resolution": "Resolution",
+    "fileSize": "File Size",
+    "contentSummary": "Content Summary",
+    "exportOptions": "Export Options",
+    "youtubeShorts": "For YouTube Shorts",
+    "youtubeShortsDesc": "Optimized 9:16 format, perfect for YouTube Shorts upload",
+    "socialMedia": "For Social Media",
+    "socialMediaDesc": "Compatible with TikTok, Instagram Reels, and other platforms",
+    "highQuality": "High Quality",
+    "highQualityDesc": "Full HD resolution with optimized compression"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close"
+  }
+}
