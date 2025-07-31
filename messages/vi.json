@@ -77,7 +77,8 @@
       },
       "backgroundImage": "Hình nền",
       "uploadBackground": "Tải lên hình nền",
-      "backgroundPreview": "Xem trước nền"
+      "backgroundPreview": "Xem trước nền",
+      "voiceSettings": "Cài đặt giọng nói"
     },
     "sectionEditor": {
       "title": "Chỉnh sửa phần",
@@ -89,17 +90,10 @@
       "selectImage": "Chọn hình ảnh",
       "voiceSettings": "Cài đặt giọng nói",
       "speed": "Tốc độ",
-      "gender": "Giới tính",
-      "accent": "Giọng",
-      "genderOptions": {
-        "female": "Nữ",
-        "male": "Nam"
-      },
+      "accent": "Giọng nói",
       "accentOptions": {
-        "american": "Mỹ",
-        "british": "Anh",
-        "australian": "Úc",
-        "canadian": "Canada"
+        "jessica": "Jessica",
+        "chulsoo": "Chulsoo"
       }
     },
     "preview": {

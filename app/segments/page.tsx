@@ -30,7 +30,7 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
-import { useVideoStore, VoiceSettings } from '@/lib/store';
+import { useVideoStore } from '@/lib/store';
 import { useRouter } from 'next/navigation';
 
 export default function SegmentsPage() {
@@ -83,11 +83,6 @@ export default function SegmentsPage() {
 
   const selectedSection = sections.find(s => s.id === selectedSectionId);
 
-  const defaultVoiceSettings: VoiceSettings = {
-    speed: 1,
-    gender: 'female',
-    accent: 'american'
-  };
 
   const handleBackgroundImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -106,14 +101,6 @@ export default function SegmentsPage() {
     updateSection(sectionId, updates);
   };
 
-  const handleVoiceSettingChange = (key: keyof VoiceSettings, value: any) => {
-    if (!selectedSection) return;
-    
-    const currentSettings = selectedSection.voiceSettings || defaultVoiceSettings;
-    const newSettings = { ...currentSettings, [key]: value };
-    
-    handleSectionUpdate(selectedSection.id, { voiceSettings: newSettings });
-  };
 
   const handleGlobalSettingChange = (key: string, value: any) => {
     updateGlobalSetting(key as any, value);
@@ -160,7 +147,6 @@ export default function SegmentsPage() {
     router.push('/render');
   };
 
-  const currentVoiceSettings = selectedSection?.voiceSettings || defaultVoiceSettings;
 
   // Helper function to get aspect ratio classes and dimensions
   const getPreviewDimensions = () => {
@@ -331,7 +317,6 @@ export default function SegmentsPage() {
                       </Badge>
                       <div className="flex items-center gap-1">
                         {section.image && <ImageIcon className="h-3 w-3 text-primary" />}
-                        {section.voiceSettings && <Volume2 className="h-3 w-3 text-primary" />}
                       </div>
                     </div>
                     <h3 className="font-medium text-sm mb-1 line-clamp-1">{section.title}</h3>
@@ -414,6 +399,45 @@ export default function SegmentsPage() {
                           </Select>
                         </div>
                       </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Global Voice Settings */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Volume2 className="h-5 w-5" />
+                      {t('globalSettings.voiceSettings')}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div>
+                      <Label>{t('sectionEditor.speed')}: {globalSettings.voiceSettings.speed}x</Label>
+                      <Slider
+                        value={[globalSettings.voiceSettings.speed]}
+                        onValueChange={([value]) => handleGlobalSettingChange('voiceSettings', { ...globalSettings.voiceSettings, speed: value })}
+                        min={0.5}
+                        max={2}
+                        step={0.1}
+                        className="mt-2"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label>{t('sectionEditor.accent')}</Label>
+                      <Select
+                        value={globalSettings.voiceSettings.accent}
+                        onValueChange={(value) => handleGlobalSettingChange('voiceSettings', { ...globalSettings.voiceSettings, accent: value })}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="jessica">{t('sectionEditor.accentOptions.jessica')}</SelectItem>
+                          <SelectItem value="chulsoo">{t('sectionEditor.accentOptions.chulsoo')}</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </CardContent>
                 </Card>
@@ -680,64 +704,6 @@ export default function SegmentsPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Voice Settings */}
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <Volume2 className="h-5 w-5" />
-                          {t('sectionEditor.voiceSettings')}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-6">
-                        <div>
-                          <Label>{t('sectionEditor.speed')}: {currentVoiceSettings.speed}x</Label>
-                          <Slider
-                            value={[currentVoiceSettings.speed]}
-                            onValueChange={([value]) => handleVoiceSettingChange('speed', value)}
-                            min={0.5}
-                            max={2}
-                            step={0.1}
-                            className="mt-2"
-                          />
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label>{t('sectionEditor.gender')}</Label>
-                            <Select
-                              value={currentVoiceSettings.gender}
-                              onValueChange={(value) => handleVoiceSettingChange('gender', value)}
-                            >
-                              <SelectTrigger className="mt-1">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="female">{t('sectionEditor.genderOptions.female')}</SelectItem>
-                                <SelectItem value="male">{t('sectionEditor.genderOptions.male')}</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          
-                          <div>
-                            <Label>{t('sectionEditor.accent')}</Label>
-                            <Select
-                              value={currentVoiceSettings.accent}
-                              onValueChange={(value) => handleVoiceSettingChange('accent', value)}
-                            >
-                              <SelectTrigger className="mt-1">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="american">{t('sectionEditor.accentOptions.american')}</SelectItem>
-                                <SelectItem value="british">{t('sectionEditor.accentOptions.british')}</SelectItem>
-                                <SelectItem value="australian">{t('sectionEditor.accentOptions.australian')}</SelectItem>
-                                <SelectItem value="canadian">{t('sectionEditor.accentOptions.canadian')}</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
 
                   </>
                 )}
@@ -955,16 +921,13 @@ export default function SegmentsPage() {
                           </div>
                         </div>
 
-                        {selectedSection.voiceSettings && (
-                          <div className="p-3 bg-muted rounded-lg">
-                            <h4 className="text-sm font-medium mb-2">{t('sectionEditor.voiceSettings')}</h4>
-                            <div className="space-y-1 text-xs text-muted-foreground">
-                              <div>{t('sectionEditor.speed')}: {selectedSection.voiceSettings.speed}x</div>
-                              <div>{t('sectionEditor.gender')}: {selectedSection.voiceSettings.gender}</div>
-                              <div>{t('sectionEditor.accent')}: {selectedSection.voiceSettings.accent}</div>
-                            </div>
+                        <div className="p-3 bg-muted rounded-lg">
+                          <h4 className="text-sm font-medium mb-2">{t('globalSettings.voiceSettings')}</h4>
+                          <div className="space-y-1 text-xs text-muted-foreground">
+                            <div>{t('sectionEditor.speed')}: {globalSettings.voiceSettings.speed}x</div>
+                            <div>{t('sectionEditor.accent')}: {globalSettings.voiceSettings.accent}</div>
                           </div>
-                        )}
+                        </div>
                       </div>
                     </>
                   )

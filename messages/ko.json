@@ -77,7 +77,8 @@
       },
       "backgroundImage": "배경 이미지",
       "uploadBackground": "배경 이미지 업로드",
-      "backgroundPreview": "배경 미리보기"
+      "backgroundPreview": "배경 미리보기",
+      "voiceSettings": "음성 설정"
     },
     "sectionEditor": {
       "title": "섹션 편집",
@@ -89,17 +90,10 @@
       "selectImage": "이미지 선택",
       "voiceSettings": "음성 설정",
       "speed": "속도",
-      "gender": "성별",
-      "accent": "억양",
-      "genderOptions": {
-        "female": "여성",
-        "male": "남성"
-      },
+      "accent": "음성",
       "accentOptions": {
-        "american": "미국",
-        "british": "영국",
-        "australian": "호주",
-        "canadian": "캐나다"
+        "jessica": "제시카",
+        "chulsoo": "철수"
       }
     },
     "preview": {

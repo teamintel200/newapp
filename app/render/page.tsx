@@ -47,6 +47,22 @@ export default function RenderPage() {
     }
   }, [sections, router]);
 
+  const pollJobStatus = async (tempDirName: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`/api/jobs/status?tempDirName=${tempDirName}`);
+      
+      if (response.status === 200) {
+        const data = await response.json();
+        return data.status === "completed";
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Error checking job status:', error);
+      return false;
+    }
+  };
+
   const handleStartRender = async () => {
     if (!projectId) {
       alert('프로젝트 ID가 없습니다. 처음부터 다시 시작해주세요.');
@@ -68,11 +84,6 @@ export default function RenderPage() {
         id: section.id,
         //title: section.title,
         text: section.text,
-        // voiceSettings: section.voiceSettings || {
-        //   speed: 1,
-        //   gender: 'female',
-        //   accent: 'american'
-        // }
       }));
       formData.append('segments', JSON.stringify(segments));
       
@@ -87,7 +98,11 @@ export default function RenderPage() {
         saturation: globalSettings.saturation || 100,
         musicVolume: globalSettings.musicVolume || 50,
         voiceVolume: globalSettings.voiceVolume || 80,
-        watermark: globalSettings.watermark || ''
+        watermark: globalSettings.watermark || '',
+        voiceSettings: globalSettings.voiceSettings || {
+          speed: 1,
+          accent: 'jessica'
+        }
       };
       formData.append('globalSettings', JSON.stringify(globalSettingsData));
       
@@ -126,21 +141,32 @@ export default function RenderPage() {
         throw new Error('비디오 생성에 실패했습니다.');
       }
 
-      const { fileName: responseFileName } = await generateResponse.json();
+      const generateData = await generateResponse.json();
+      const responseFileName = generateData.fileName || `${projectId}.mp4`;
       setFileName(responseFileName);
       
-      // Simulate progress for user experience
-      const interval = setInterval(() => {
-        setRenderProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setIsRendering(false);
-            setIsComplete(true);
-            return 100;
+      // Start polling for job completion
+      let progressValue = 10;
+      setRenderProgress(progressValue);
+      
+      const pollInterval = setInterval(async () => {
+        const isComplete = await pollJobStatus(projectId);
+        
+        if (isComplete) {
+          clearInterval(pollInterval);
+          setRenderProgress(100);
+          setIsRendering(false);
+          setIsComplete(true);
+          // Ensure fileName is still set after completion
+          if (!fileName && responseFileName) {
+            setFileName(responseFileName);
           }
-          return prev + Math.random() * 10;
-        });
-      }, 300);
+        } else {
+          // Gradually increase progress while polling
+          progressValue = Math.min(progressValue + Math.random() * 5, 95);
+          setRenderProgress(progressValue);
+        }
+      }, 1000);
 
     } catch (error) {
       console.error('Error generating video:', error);
@@ -191,7 +217,7 @@ export default function RenderPage() {
   };
 
   // Calculate video duration and format sections for display
-  const sectionsWithDuration = sections.map((section, index) => ({
+  const sectionsWithDuration = sections.map((section) => ({
     ...section,
     duration: `${Math.max(2, Math.ceil(section.text?.length / 20) || 3)}s`
   }));

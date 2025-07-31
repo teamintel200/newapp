@@ -77,7 +77,8 @@
       },
       "backgroundImage": "Background Image",
       "uploadBackground": "Upload Background Image",
-      "backgroundPreview": "Background Preview"
+      "backgroundPreview": "Background Preview",
+      "voiceSettings": "Voice Settings"
     },
     "sectionEditor": {
       "title": "Edit Section",
@@ -89,17 +90,10 @@
       "selectImage": "Select Image",
       "voiceSettings": "Voice Settings",
       "speed": "Speed",
-      "gender": "Gender",
-      "accent": "Accent",
-      "genderOptions": {
-        "female": "Female",
-        "male": "Male"
-      },
+      "accent": "Voice",
       "accentOptions": {
-        "american": "American",
-        "british": "British",
-        "australian": "Australian",
-        "canadian": "Canadian"
+        "jessica": "Jessica",
+        "chulsoo": "Chulsoo"
       }
     },
     "preview": {

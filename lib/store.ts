@@ -2,8 +2,7 @@ import { create } from 'zustand'
 
 export interface VoiceSettings {
   speed: number;
-  gender: 'male' | 'female';
-  accent: 'american' | 'british' | 'australian' | 'canadian';
+  accent: 'jessica' | 'chulsoo';
 }
 
 export interface Section {
@@ -11,7 +10,6 @@ export interface Section {
   title: string;
   text: string;
   image?: string;
-  voiceSettings?: VoiceSettings;
 }
 
 export interface GlobalSettings {
@@ -26,6 +24,7 @@ export interface GlobalSettings {
   outputQuality: 'HD' | 'FHD' | '4K';
   background: 'black' | 'white' | 'custom';
   customBackgroundImage?: string;
+  voiceSettings: VoiceSettings;
 }
 
 interface VideoStore {
@@ -62,7 +61,11 @@ const defaultGlobalSettings: GlobalSettings = {
   aspectRatio: '9:16',
   outputQuality: 'FHD',
   background: 'black',
-  customBackgroundImage: undefined
+  customBackgroundImage: undefined,
+  voiceSettings: {
+    speed: 1,
+    accent: 'jessica'
+  }
 };
 
 export const useVideoStore = create<VideoStore>()((set, get) => ({
@@ -118,7 +121,7 @@ export const useVideoStore = create<VideoStore>()((set, get) => ({
       
       // Create merged section with combined text and previous section's metadata
       const mergedSection: Section = {
-        ...previousSection, // Keep previous section's metadata (title, image, voiceSettings)
+        ...previousSection, // Keep previous section's metadata (title, image)
         text: `${previousSection.text} ${currentSection.text}`.trim()
       };
       
